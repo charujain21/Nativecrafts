@@ -1,7 +1,7 @@
 import { assets } from "../../assets/assets";
 import { useAppContext } from "../../context/AppContext";
 import { NavLink, Link, Outlet } from "react-router-dom";
-import toast from "react-hot-toast"; // Ensure toast is imported
+import toast from "react-hot-toast";
 
 const SellerLayout = () => {
   const { axios, navigate } = useAppContext();
@@ -14,7 +14,10 @@ const SellerLayout = () => {
 
   const logout = async () => {
     try {
-      const { data } = await axios.get('/api/seller/logout');
+      const { data } = await axios.get('/api/seller/logout', {
+        withCredentials: true, // ✅ Ensure cookies are sent
+      });
+
       if (data.success) {
         toast.success(data.message);
         navigate('/');
@@ -22,7 +25,10 @@ const SellerLayout = () => {
         toast.error(data.message);
       }
     } catch (error) {
-      toast.error(error.message); // Fixed error handling
+      // ✅ Better error message handling
+      toast.error(
+        error?.response?.data?.message || error.message || "Logout failed"
+      );
     }
   };
 
@@ -39,6 +45,7 @@ const SellerLayout = () => {
           </button>
         </div>
       </div>
+
       <div className="flex">
         <div className="md:w-64 w-16 border-r h-[95vh] text-base border-gray-300 pt-4 flex flex-col">
           {sidebarLinks.map((item) => (
