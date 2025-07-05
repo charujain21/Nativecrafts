@@ -12,7 +12,12 @@ const SellerLogin = () => {
     event.preventDefault(); // Ensure preventDefault is always called first
     setLoading(true); // Set loading to true when submission starts
     try {
-      const { data } = await axios.post('/api/seller/login', { email, password });
+    const { data } = await axios.post(
+  '/api/seller/login',
+  { email, password },
+  { withCredentials: true } // <-- Add this option!
+);
+    // Check if the response indicates success
       if (data.success) {
         setIsSeller(true);
         toast.success(data.message || "Login successful!"); // Use backend message or default

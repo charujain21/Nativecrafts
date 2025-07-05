@@ -28,11 +28,19 @@ await connectDB();
 await connectCloudinary()
 
 //allow multiple origins
-const allowedOrigins = ['http://localhost:5173','https://nativecrafts-3esi.vercel.app']
+const allowedOrigins = ['http://localhost:5173', 'https://nativecrafts-3esi.vercel.app'];
 
-app.post('/stripe', express.raw({type: 'application/json'}), stripeWebhooks)
+app.use(cors({
+  origin: function(origin, callback) {
+    // allow requests with no origin (like mobile apps, curl, etc.)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) return callback(null, true);
+    return callback(new Error('Not allowed by CORS'));
+  },
+  credentials: true,
+  optionsSuccessStatus: 200
+}));
 
-//middleware configuration
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({origin: allowedOrigins, credentials: true})); //in that allow version that allow to pass here
