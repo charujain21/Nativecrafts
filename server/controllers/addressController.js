@@ -72,7 +72,6 @@ export const addAddress = async (req, res) => {
     }
 }
 
-
 //get address : /api/address/get
 export const getAddress = async (req, res) => {
     try {
@@ -98,3 +97,7 @@ export const getAddress = async (req, res) => {
         });
     }
 };
+
+
+
+
